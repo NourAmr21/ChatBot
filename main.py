@@ -1,18 +1,26 @@
 import openai 
 import json
 import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
-openai.api_key = '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'
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI()
 #######################################################################################
 with open(r"C:\Users\LENOVO\Downloads\scraped_data.json", "r", encoding="utf-8") as f:
     scraped = json.load(f)
-company_context = scraped[0]["text"].replace("\n", " ").strip()[:3000]
+#company_context = scraped[0]["text"].replace("\n", " ").strip()[:3000]
+company_context = ""
+for item in scraped:
+    company_context += item["text"].replace("\n", " ").strip()[:] + " " 
+MEMORY_FILE = r"C:\Users\LENOVO\Downloads\ChatBot\memory.json"
 def save_memory():
     with open(MEMORY_FILE, "w", encoding="utf-8") as f:
         json.dump(memory, f, indent=2, ensure_ascii=False)
 
 # Load memory
-MEMORY_FILE = "memory.json"
+
 if os.path.exists(MEMORY_FILE):
     with open(MEMORY_FILE, "r", encoding="utf-8") as f:
         memory = json.load(f)
@@ -31,7 +39,7 @@ def add_to_memory(post):
 
 def generate_reply(user_input):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
@@ -76,6 +84,25 @@ if __name__ == "__main__":
         if looks_like_content:
             approval = input("\n✅ Approve this content? (yes/no/edit): ").strip().lower()
             if approval == "yes":
+                generate_image = input("🖼️ Generate an image for this post? (yes/no/custom): ").strip().lower()
+                if generate_image in ["yes", "custom"]:
+                    if generate_image == "yes":
+                        image_prompt = f"An illustrative image that visually represents the following content:\n{response[:300]}"
+                    else:
+                        image_prompt = input("🖌️ Enter your custom image prompt: ").strip()
+
+                    try:
+                        img_response = client.images.generate(
+                            model="dall-e-3",  
+                            prompt=image_prompt,
+                            n=1,
+                            size="1024x1024"
+                        )
+                        image_url = img_response.data[0].url
+                        print(f"📷 Image generated: {image_url}")
+                        #record["image_url"] = image_url
+                    except Exception as e:
+                        print(f"❌ Failed to generate image: {e}")
                 memory.append(response)
                 save_memory()
                 print("✅ Saved to memory.")
