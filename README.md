@@ -34,8 +34,7 @@ A conversational AI assistant built using **Streamlit**, **LangChain**, and **Op
 
 - Install all dependencies using:
 
-- ```bash
-- pip install -r requirements.txt
+- <pre> ```pip install -r requirements.txt ``` </pre>
 
 - Create a .env file with your OpenAI key:
 - OPENAI_API_KEY=your_openai_key_here
