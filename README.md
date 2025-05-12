@@ -15,13 +15,19 @@ A conversational AI assistant built using **Streamlit**, **LangChain**, and **Op
 
 ## 📂 Project Structure
 
--├── 34BOT_lang.py # CLI BOT
--├── ui_test.py # Main Streamlit app
--├── memory.json # Local memory of saved content
--├── scraped_data.json # JSON file with company context
--├── scraper.py # Python script for scraping the website using BeautifulSoup (can be used to schedule periodic scraping to update the context of the bot as the website gets updated)
--├── .env # Environment variables (e.g. OpenAI API key)
--└── README.md # Project documentation
+├── 34BOT_lang.py # CLI BOT
+
+├── ui_test.py # Main Streamlit app
+
+├── memory.json # Local memory of saved content
+
+├── scraped_data.json # JSON file with company context
+
+├── scraper.py # Python script for scraping the website using BeautifulSoup (can be used to schedule periodic scraping to update the context of the bot as the website gets updated)
+
+├── .env # Environment variables (e.g. OpenAI API key)
+
+└── README.md # Project documentation
 
 
 ## 🔧 Requirements
